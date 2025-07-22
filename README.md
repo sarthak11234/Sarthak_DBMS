@@ -19,8 +19,6 @@ Use: Show the structure of the student table, including columns, types, nullabil
 7. create user 'sarthak'@localhost identified by 'sarthak123';
 Use: Create a new MySQL user named sarthak that can connect from localhost with the specified password.
 
-Note: This command failed because the user already existed.
-
 8. SELECT User, Host FROM mysql.user WHERE User = 'sarthak' AND Host = 'localhost';
 Use: Check if the user sarthak exists on localhost in the MySQL user table.
 
