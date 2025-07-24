@@ -78,6 +78,67 @@ Commands used to manage transactions.
 | `SUBQUERY`       | Nested query. | `SELECT name FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);` |
 
 ---
+# 📘 SQL Constraints Guide
+
+This README provides a comprehensive overview of SQL **constraints**—rules used to enforce data integrity in relational databases.
+
+---
+
+# 📘 SQL Constraints – Reference Table
+
+This document provides a tabular overview of SQL constraints with examples for each type. Constraints are essential for maintaining data integrity and enforcing business rules in relational databases.
+
+---
+
+## 📋 Constraints Overview
+
+| Constraint     | Description                                                                 | Example                                                                 |
+|----------------|-----------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| `NOT NULL`     | Ensures a column cannot have a NULL value                                   | `FirstName VARCHAR(50) NOT NULL`                                        |
+| `UNIQUE`       | Ensures all values in a column are different                                | `Email VARCHAR(255) UNIQUE`                                             |
+| `PRIMARY KEY`  | Uniquely identifies each record in a table (`NOT NULL` + `UNIQUE`)          | `ProductID INT PRIMARY KEY`                                             |
+| `FOREIGN KEY`  | Enforces referential integrity between two tables                           | `FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)`             |
+| `CHECK`        | Ensures values in a column meet a specific condition                        | `Age INT CHECK (Age >= 18)`                                             |
+| `DEFAULT`      | Sets a default value when no value is provided                              | `Status VARCHAR(20) DEFAULT 'Active'`                                   |
+
+---
+
+## 🧪 Full Examples
+
+| Use Case         | SQL Example                                                                 |
+|------------------|------------------------------------------------------------------------------|
+| Create table with `NOT NULL`                              | `CREATE TABLE Employees (ID INT NOT NULL, Name VARCHAR(100) NOT NULL);` |
+| Add `UNIQUE` constraint                                   | `CREATE TABLE Users (UserID INT PRIMARY KEY, Email VARCHAR(255) UNIQUE);` |
+| Define `PRIMARY KEY`                                     | `CREATE TABLE Products (ProductID INT PRIMARY KEY, ProductName VARCHAR(100));` |
+| Composite `PRIMARY KEY`                                  | `CREATE TABLE OrderItems (OrderID INT, ProductID INT, PRIMARY KEY (OrderID, ProductID));` |
+| Add `FOREIGN KEY` relationship                           | `CREATE TABLE Orders (OrderID INT PRIMARY KEY, CustomerID INT, FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID));` |
+| Use `CHECK` for validation                               | `CREATE TABLE Employees (EmployeeID INT PRIMARY KEY, Age INT CHECK (Age >= 18));` |
+| Set `DEFAULT` value                                      | `CREATE TABLE Accounts (AccountID INT PRIMARY KEY, Status VARCHAR(20) DEFAULT 'Active');` |
+
+---
+
+## 🔄 Altering Constraints
+
+| Operation         | SQL Command                                                                 |
+|-------------------|------------------------------------------------------------------------------|
+| Add a constraint  | `ALTER TABLE Employees ADD CONSTRAINT chk_age CHECK (Age >= 18);`           |
+| Drop a constraint | `ALTER TABLE Employees DROP CONSTRAINT chk_age;`                            |
+
+> ⚠️ Constraint names must be known to drop them. Use system views or `INFORMATION_SCHEMA` to find them if needed.
+
+---
+
+## ✅ Best Practices
+
+| Tip                          | Description                                                                 |
+|-----------------------------|-----------------------------------------------------------------------------|
+| Name your constraints        | Use meaningful names like `chk_salary`, `fk_order_customer`                |
+| Use `FOREIGN KEY` wisely     | Enforce relationships between tables to prevent orphan records             |
+| Validate with `CHECK`        | Apply business rules directly in the schema                                |
+| Use `DEFAULT` values         | Avoid NULLs and simplify data entry                                        |
+
+---
+
 
 ## 📎 Notes
 
