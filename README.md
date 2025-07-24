@@ -78,11 +78,6 @@ Commands used to manage transactions.
 | `SUBQUERY`       | Nested query. | `SELECT name FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);` |
 
 ---
-# 📘 SQL Constraints Guide
-
-This README provides a comprehensive overview of SQL **constraints**—rules used to enforce data integrity in relational databases.
-
----
 
 # 📘 SQL Constraints – Reference Table
 
