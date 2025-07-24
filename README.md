@@ -1,46 +1,87 @@
-1. mysql -h localhost -u root -p
-Use: Connect to the MySQL server on localhost as user root. The -p prompts for the password.
+# 📘 SQL Commands Cheat Sheet with Examples
 
-2. show databases;
-Use: List all databases available on the MySQL server.
+This README provides a comprehensive overview of commonly used SQL commands, organized by category, with their purpose and usage examples.
 
-3. create database new;
-Use: Create a new database called new.
+---
 
-4. use new;
-Use: Select the database new to start working with it.
+## 🏗️ Data Definition Language (DDL)
 
-5. create table new.student(rollno int , name varchar(50));
-Use: Create a table named student in the new database with two columns: rollno (integer) and name (string up to 50 characters).
+Commands used to define and modify database structure.
 
-6. describe student; or desc student;
-Use: Show the structure of the student table, including columns, types, nullability, keys, etc.
+| Command      | Description | Example |
+|--------------|-------------|---------|
+| `CREATE`     | Creates a new table, database, view, index, etc. | `CREATE TABLE employees (id INT, name VARCHAR(100));` |
+| `ALTER`      | Modifies an existing database object. | `ALTER TABLE employees ADD COLUMN salary DECIMAL(10,2);` |
+| `DROP`       | Deletes a table, database, or object permanently. | `DROP TABLE employees;` |
+| `TRUNCATE`   | Removes all rows from a table. | `TRUNCATE TABLE employees;` |
+| `RENAME`     | Renames a database object. | `ALTER TABLE employees RENAME TO staff;` |
 
-7. create user 'sarthak'@localhost identified by 'sarthak123';
-Use: Create a new MySQL user named sarthak that can connect from localhost with the specified password.
+---
 
-8. SELECT User, Host FROM mysql.user WHERE User = 'sarthak' AND Host = 'localhost';
-Use: Check if the user sarthak exists on localhost in the MySQL user table.
+## 📥 Data Manipulation Language (DML)
 
-9. grant all privileges on new.* to sarthak@localhost;
-Use: Grant all privileges on all tables in the new database to the user sarthak from localhost.
+Commands used to manage data within tables.
 
-10. alter table student add address varchar(50);
-Use: Add a new column address of type varchar(50) to the student table.
+| Command    | Description | Example |
+|------------|-------------|---------|
+| `SELECT`   | Retrieves data. | `SELECT name FROM employees WHERE salary > 50000;` |
+| `INSERT`   | Adds new rows. | `INSERT INTO employees (id, name, salary) VALUES (1, 'Alice', 60000);` |
+| `UPDATE`   | Modifies data. | `UPDATE employees SET salary = 65000 WHERE id = 1;` |
+| `DELETE`   | Removes rows. | `DELETE FROM employees WHERE id = 1;` |
+| `MERGE`    | Combines insert/update/delete. | `MERGE INTO employees USING new_data ON employees.id = new_data.id WHEN MATCHED THEN UPDATE SET salary = new_data.salary WHEN NOT MATCHED THEN INSERT VALUES (...);` |
 
-11. alter table student modify rollno int NOT NULL;
-Use: Change the column rollno in the student table to not allow NULL values.
+---
 
-12. INSERT INTO student (rollno, name, address) VALUES (1, 'John Doe', '123 Main St');
-Use: Insert a new row with values (1, 'John Doe', '123 Main St') into the student table.
+## 🔐 Data Control Language (DCL)
 
-13. insert into student (rollno, name, address) values (2, 'Smith Arth','456 Main St');
-Use: Insert another row into the student table with different values.
+Commands used to control access to data.
 
-14. alter table student add primary key (rollno);
-Use: Add a primary key constraint on the rollno column of the student table, ensuring uniqueness and indexing.
+| Command    | Description | Example |
+|------------|-------------|---------|
+| `GRANT`    | Gives privileges. | `GRANT SELECT, INSERT ON employees TO user1;` |
+| `REVOKE`   | Removes privileges. | `REVOKE INSERT ON employees FROM user1;` |
 
-15. select * from student;
-Use: Retrieve all rows and columns from the student table.
+---
 
+## ⚙️ Transaction Control Language (TCL)
 
+Commands used to manage transactions.
+
+| Command     | Description | Example |
+|-------------|-------------|---------|
+| `COMMIT`    | Saves changes. | `COMMIT;` |
+| `ROLLBACK`  | Undoes changes. | `ROLLBACK;` |
+| `SAVEPOINT` | Sets rollback point. | `SAVEPOINT before_update;` |
+| `SET TRANSACTION` | Sets transaction properties. | `SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;` |
+
+---
+
+## 🔍 Common SQL Clauses & Keywords
+
+| Clause / Keyword | Description | Example |
+|------------------|-------------|---------|
+| `WHERE`          | Filters rows. | `SELECT * FROM employees WHERE salary > 50000;` |
+| `GROUP BY`       | Groups rows. | `SELECT department, AVG(salary) FROM employees GROUP BY department;` |
+| `HAVING`         | Filters groups. | `SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) > 5;` |
+| `ORDER BY`       | Sorts results. | `SELECT * FROM employees ORDER BY salary DESC;` |
+| `JOIN`           | Combines tables. | `SELECT e.name, d.name FROM employees e JOIN departments d ON e.dept_id = d.id;` |
+| `UNION`          | Combines results (no duplicates). | `SELECT name FROM employees UNION SELECT name FROM managers;` |
+| `UNION ALL`      | Combines results (with duplicates). | `SELECT name FROM employees UNION ALL SELECT name FROM managers;` |
+| `IN`             | Checks list membership. | `SELECT * FROM employees WHERE department IN ('HR', 'Finance');` |
+| `BETWEEN`        | Checks range. | `SELECT * FROM employees WHERE salary BETWEEN 40000 AND 60000;` |
+| `LIKE`           | Pattern matching. | `SELECT * FROM employees WHERE name LIKE 'A%';` |
+| `IS NULL`        | Checks for nulls. | `SELECT * FROM employees WHERE manager_id IS NULL;` |
+| `DISTINCT`       | Removes duplicates. | `SELECT DISTINCT department FROM employees;` |
+| `LIMIT` / `TOP`  | Limits rows. | `SELECT * FROM employees LIMIT 10;` (MySQL) / `SELECT TOP 10 * FROM employees;` (SQL Server) |
+| `CASE`           | Conditional logic. | `SELECT name, CASE WHEN salary > 50000 THEN 'High' ELSE 'Low' END AS salary_level FROM employees;` |
+| `EXISTS`         | Checks subquery existence. | `SELECT name FROM employees WHERE EXISTS (SELECT 1 FROM managers WHERE managers.id = employees.manager_id);` |
+| `SUBQUERY`       | Nested query. | `SELECT name FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);` |
+
+---
+
+## 📎 Notes
+
+- SQL syntax may vary slightly between databases (e.g., MySQL, PostgreSQL, SQL Server, Oracle).
+- Always back up your data before using destructive commands like `DROP` or `TRUNCATE`.
+
+---
