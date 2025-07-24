@@ -175,4 +175,13 @@ mysql> desc Transaction;
 | Amount          | decimal(15,2) | YES  |     | NULL      |                   |
 | TransactionDate | date          | NO   | MUL | curdate() | DEFAULT_GENERATED |
 +-----------------+---------------+------+-----+-----------+-------------------+
+
+mysql> show indexes from Transaction;
++-------------+------------+---------------------+--------------+-----------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table       | Non_unique | Key_name            | Seq_in_index | Column_name     | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++-------------+------------+---------------------+--------------+-----------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| transaction |          0 | PRIMARY             |            1 | TransactionID   | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| transaction |          1 | AccountID           |            1 | AccountID       | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| transaction |          1 | idx_TransactionDate |            1 | TransactionDate | A         |           0 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
++-------------+------------+---------------------+--------------+-----------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
 5 rows in set (0.00 sec)
