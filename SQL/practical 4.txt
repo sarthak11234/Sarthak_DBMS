@@ -15,95 +15,164 @@ owners.
 
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-mysql> show databases;
-+--------------------+
-| Database           |
-+--------------------+
-| a                  |
-| bank               |
-| book               |
-| bookstore          |
-| bookstores         |
-| borrower           |
-| collegedata        |
-| cricket            |
-| customer           |
-| demo               |
-| demo12             |
-| demo2              |
-| demo3              |
-| demob2             |
-| demodb             |
-| depositer          |
-| depositor          |
-| emp                |
-| employee           |
-| employee1          |
-| industry           |
-| information_schema |
-| inventory          |
-| loan               |
-| mysql              |
-| mysqlconnect       |
-| n_tanmay           |
-| performance_schema |
-| sampledb           |
-| student            |
-| student1           |
-| sys                |
-| tanmay             |
-| transport          |
-| trupti             |
-| user               |
-| vehicle            |
-+--------------------+
-37 rows in set (0.04 sec)
 
+mysql> create database bank;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> CREATE TABLE Customer (
+    ->     CustomerID INT PRIMARY KEY,
+    ->     Name VARCHAR(100) NOT NULL,
+    ->     Address VARCHAR(255),
+    ->     Phone VARCHAR(20),
+    ->     Email VARCHAR(100)
+    -> );
+ERROR 1046 (3D000): No database selected
 mysql> use bank;
 Database changed
-mysql> select customerID,name from customer;
-+------------+-------+
-| customerID | name  |
-+------------+-------+
-|       1234 | SARTH |
-+------------+-------+
-1 row in set (0.02 sec)
+mysql> CREATE TABLE Customer (
+    ->     CustomerID INT PRIMARY KEY,
+    ->     Name VARCHAR(100) NOT NULL,
+    ->     Address VARCHAR(255),
+    ->     Phone VARCHAR(20),
+    ->     Email VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.17 sec)
 
-mysql> desc customer;
-+------------+-------------+------+-----+----------+-------+
-| Field      | Type        | Null | Key | Default  | Extra |
-+------------+-------------+------+-----+----------+-------+
-| customerID | int         | NO   |     | NULL     |       |
-| name       | varchar(10) | YES  |     | NULL     |       |
-| address    | varchar(20) | YES  |     | Talegaon |       |
-| emailID    | varchar(20) | YES  |     | NULL     |       |
-+------------+-------------+------+-----+----------+-------+
-4 rows in set (0.02 sec)
+mysql> CREATE TABLE Account (
+    ->     AccountID INT PRIMARY KEY,
+    ->     CustomerID INT NOT NULL,
+    ->     AccountType VARCHAR(50),
+    ->     Balance DECIMAL(15,2),
+    ->     CreatedDate DATE,
+    ->     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+    -> );
+Query OK, 0 rows affected (0.16 sec)
 
-mysql> create view customerView as select customerID,name from customer;
+mysql> CREATE TABLE Transaction (
+    ->     TransactionID INT PRIMARY KEY,
+    ->     AccountID INT NOT NULL,
+    ->     TransactionType VARCHAR(50),
+    ->     Amount DECIMAL(15,2),
+    ->     TransactionDate DATE,
+    ->     FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+    -> );
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> CREATE TABLE Employee (
+    ->     EmployeeID INT PRIMARY KEY,
+    ->     Name VARCHAR(100) NOT NULL,
+    ->     Designation VARCHAR(100),
+    ->     Branch VARCHAR(100),
+    ->     Salary DECIMAL(10,2)
+    -> );
+Query OK, 0 rows affected (0.67 sec)
+
+mysql> select Name,AccountType, Balance from customer c,Account a where c.CustomerID = a.CustomerID;
+Empty set (0.00 sec)
+
+mysql> insert into Customer values(101,'Ajay','Talegaon',9539853573,abc
+    -> @gmail.com);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@gmail.com)' at line 2
+mysql> insert into Customer values(101,'Ajay','Talegaon',9539853573,'abc@gmail');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Customer values(101,'Sunil','Pune',9535353573,'fgc@gmail');
+ERROR 1062 (23000): Duplicate entry '101' for key 'customer.PRIMARY'
+mysql> insert into Customer values(102,'Sunil','Pune',9535353573,'fgc@gmail');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Customer values(103,'Rohit','Mumbai',9139853573,'lkc@gmail');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select Name,AccountType, Balance from customer c,Account a where c.CustomerID = a.CustomerID;
+Empty set (0.00 sec)
+
+mysql> create view CustomerView as select Name,AccountId,Balance from Customer,Account;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> desc CustomerView;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| Name      | varchar(100)  | NO   |     | NULL    |       |
+| AccountId | int           | NO   |     | NULL    |       |
+| Balance   | decimal(15,2) | YES  |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from CustomerView;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO Account (AccountID, CustomerID, AccountType, Balance, CreatedDate)
+    -> VALUES
+    -> (201, 101, 'Savings', 10000.00, '2025-07-01'),
+    -> (202, 102, 'Checking', 2500.50, '2025-06-15'),
+    -> (203, 103, 'Savings', 500.00, '2025-07-10');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> CREATE OR REPLACE VIEW CustomerView AS
+    -> SELECT c.Name, a.AccountID, a.Balance
+    -> FROM Customer c
+    -> JOIN Account a ON c.CustomerID = a.CustomerID;
 Query OK, 0 rows affected (0.01 sec)
 
-mysql> desc customerView;
-+------------+-------------+------+-----+---------+-------+
-| Field      | Type        | Null | Key | Default | Extra |
-+------------+-------------+------+-----+---------+-------+
-| customerID | int         | NO   |     | NULL    |       |
-| name       | varchar(10) | YES  |     | NULL    |       |
-+------------+-------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-
-mysql> insert into customerView values(1234,'Sid');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into customerView(customerID) value(4353);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> select * from customerView;
-+------------+-------+
-| customerID | name  |
-+------------+-------+
-|       1234 | SARTH |
-|       1234 | Sid   |
-|       4353 | NULL  |
-+------------+-------+
+mysql> SELECT * FROM CustomerView;
++-------+-----------+----------+
+| Name  | AccountID | Balance  |
++-------+-----------+----------+
+| Ajay  |       201 | 10000.00 |
+| Sunil |       202 |  2500.50 |
+| Rohit |       203 |   500.00 |
++-------+-----------+----------+
 3 rows in set (0.00 sec)
+
+mysql> desc CustomerView;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| Name      | varchar(100)  | NO   |     | NULL    |       |
+| AccountID | int           | NO   |     | NULL    |       |
+| Balance   | decimal(15,2) | YES  |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE INDEX idx_TransactionDate ON Transaction(TransactionDate);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Account
+    -> MODIFY Balance DECIMAL(15,2) NOT NULL CHECK (Balance >= 0),
+    -> MODIFY CreatedDate DATE NOT NULL DEFAULT (CURRENT_DATE);
+Query OK, 3 rows affected (0.17 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Transaction
+    -> MODIFY TransactionType VARCHAR(50) NOT NULL CHECK (TransactionType IN ('Credit', 'Debit')),
+    -> MODIFY TransactionDate DATE NOT NULL DEFAULT (CURRENT_DATE);
+Query OK, 0 rows affected (0.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Account;
++-------------+---------------+------+-----+-----------+-------------------+
+| Field       | Type          | Null | Key | Default   | Extra             |
++-------------+---------------+------+-----+-----------+-------------------+
+| AccountID   | int           | NO   | PRI | NULL      |                   |
+| CustomerID  | int           | NO   | MUL | NULL      |                   |
+| AccountType | varchar(50)   | YES  |     | NULL      |                   |
+| Balance     | decimal(15,2) | NO   |     | NULL      |                   |
+| CreatedDate | date          | NO   |     | curdate() | DEFAULT_GENERATED |
++-------------+---------------+------+-----+-----------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> desc Transaction;
++-----------------+---------------+------+-----+-----------+-------------------+
+| Field           | Type          | Null | Key | Default   | Extra             |
++-----------------+---------------+------+-----+-----------+-------------------+
+| TransactionID   | int           | NO   | PRI | NULL      |                   |
+| AccountID       | int           | NO   | MUL | NULL      |                   |
+| TransactionType | varchar(50)   | NO   |     | NULL      |                   |
+| Amount          | decimal(15,2) | YES  |     | NULL      |                   |
+| TransactionDate | date          | NO   | MUL | curdate() | DEFAULT_GENERATED |
++-----------------+---------------+------+-----+-----------+-------------------+
+5 rows in set (0.00 sec)
