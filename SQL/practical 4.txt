@@ -1,0 +1,109 @@
+Microsoft Windows [Version 10.0.19045.6093]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.34 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| a                  |
+| bank               |
+| book               |
+| bookstore          |
+| bookstores         |
+| borrower           |
+| collegedata        |
+| cricket            |
+| customer           |
+| demo               |
+| demo12             |
+| demo2              |
+| demo3              |
+| demob2             |
+| demodb             |
+| depositer          |
+| depositor          |
+| emp                |
+| employee           |
+| employee1          |
+| industry           |
+| information_schema |
+| inventory          |
+| loan               |
+| mysql              |
+| mysqlconnect       |
+| n_tanmay           |
+| performance_schema |
+| sampledb           |
+| student            |
+| student1           |
+| sys                |
+| tanmay             |
+| transport          |
+| trupti             |
+| user               |
+| vehicle            |
++--------------------+
+37 rows in set (0.04 sec)
+
+mysql> use bank;
+Database changed
+mysql> select customerID,name from customer;
++------------+-------+
+| customerID | name  |
++------------+-------+
+|       1234 | SARTH |
++------------+-------+
+1 row in set (0.02 sec)
+
+mysql> desc customer;
++------------+-------------+------+-----+----------+-------+
+| Field      | Type        | Null | Key | Default  | Extra |
++------------+-------------+------+-----+----------+-------+
+| customerID | int         | NO   |     | NULL     |       |
+| name       | varchar(10) | YES  |     | NULL     |       |
+| address    | varchar(20) | YES  |     | Talegaon |       |
+| emailID    | varchar(20) | YES  |     | NULL     |       |
++------------+-------------+------+-----+----------+-------+
+4 rows in set (0.02 sec)
+
+mysql> create view customerView as select customerID,name from customer;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> desc customerView;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| customerID | int         | NO   |     | NULL    |       |
+| name       | varchar(10) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into customerView values(1234,'Sid');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customerView(customerID) value(4353);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customerView;
++------------+-------+
+| customerID | name  |
++------------+-------+
+|       1234 | SARTH |
+|       1234 | Sid   |
+|       4353 | NULL  |
++------------+-------+
+3 rows in set (0.00 sec)
