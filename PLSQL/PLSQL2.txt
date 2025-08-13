@@ -1,0 +1,230 @@
+PLSQL:
+-- Step 1: Create Tables
+CREATE TABLE Stud_Marks (
+    Name VARCHAR2(100),
+    Total_Marks NUMBER
+);
+
+CREATE TABLE Result (
+    Roll NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Name VARCHAR2(100),
+    Class VARCHAR2(30)
+);
+
+-- Step 2: Insert Sample Data
+INSERT INTO Stud_Marks (Name, Total_Marks) VALUES ('Alice', 1200);
+INSERT INTO Stud_Marks (Name, Total_Marks) VALUES ('Bob', 980);
+INSERT INTO Stud_Marks (Name, Total_Marks) VALUES ('Charlie', 870);
+INSERT INTO Stud_Marks (Name, Total_Marks) VALUES ('David', 800);
+COMMIT;
+
+-- Step 3: Create the Stored Procedure
+CREATE OR REPLACE PROCEDURE proc_Grade (
+    p_name IN VARCHAR2,
+    p_marks IN NUMBER
+) AS
+    v_class VARCHAR2(30);
+BEGIN
+    IF p_marks >= 990 AND p_marks <= 1500 THEN
+        v_class := 'Distinction';
+    ELSIF p_marks >= 900 AND p_marks <= 989 THEN
+        v_class := 'First Class';
+    ELSIF p_marks >= 825 AND p_marks <= 899 THEN
+        v_class := 'Higher Second Class';
+    ELSE
+        v_class := 'Not Classified';
+    END IF;
+
+    INSERT INTO Result (Name, Class)
+    VALUES (p_name, v_class);
+END;
+/
+
+-- Step 4: Use the Procedure in a PL/SQL Block
+BEGIN
+    FOR rec IN (SELECT Name, Total_Marks FROM Stud_Marks) LOOP
+        proc_Grade(rec.Name, rec.Total_Marks);
+    END LOOP;
+END;
+/
+
+-- Step 5: View Results
+SELECT * FROM Result;
+
+OUTPUT:
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Aug 13 14:49:35 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Aug 13 2025 14:47:01 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> CREATE TABLE Stud_Marks (
+  2      Name VARCHAR2(100),
+  3      Total_Marks NUMBER
+  4  );
+
+Table created.
+
+SQL> @C:\Users\System05\DocumentsPrac2.sql
+SP2-0310: unable to open file "C:\Users\System05\DocumentsPrac2.sql"
+SQL> @"C:\Users\System05\Documents\Prac2.sql"
+SP2-0310: unable to open file "C:\Users\System05\Documents\Prac2.sql"
+SQL> @C:\Users\System05\Desktop\A3 68Prac.sql
+SP2-0310: unable to open file "C:\Users\System05\Desktop\A3.sql"
+SQL> @C:\Users\System05\Documents\Prac2.sql
+CREATE TABLE Stud_Marks (
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+
+Table created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Commit complete.
+
+
+Procedure created.
+
+
+PL/SQL procedure successfully completed.
+
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+         1
+Alice
+Distinction
+
+         2
+Bob
+First Class
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+
+         3
+Charlie
+Higher Second Class
+
+         4
+David
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+Not Classified
+
+
+SQL> desc Stud_Marks;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NAME                                               VARCHAR2(100)
+ TOTAL_MARKS                                        NUMBER
+
+SQL> select * from Stud_Marks;
+
+NAME
+--------------------------------------------------------------------------------
+TOTAL_MARKS
+-----------
+Alice
+       1200
+
+Bob
+        980
+
+Charlie
+        870
+
+
+NAME
+--------------------------------------------------------------------------------
+TOTAL_MARKS
+-----------
+David
+        800
+
+
+SQL> desc Result;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLL                                      NOT NULL NUMBER
+ NAME                                               VARCHAR2(100)
+ CLASS                                              VARCHAR2(30)
+
+SQL> select * from Result;
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+         1
+Alice
+Distinction
+
+         2
+Bob
+First Class
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+
+         3
+Charlie
+Higher Second Class
+
+         4
+David
+
+      ROLL
+----------
+NAME
+--------------------------------------------------------------------------------
+CLASS
+------------------------------
+Not Classified
