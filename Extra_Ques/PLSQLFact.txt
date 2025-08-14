@@ -1,0 +1,32 @@
+question:
+Write a PL/SQL block of code to calculate the factorial value of number
+
+
+Output code:
+
+SET SERVEROUTPUT ON;
+
+ACCEPT n NUMBER PROMPT 'Enter a number: '
+
+DECLARE
+    num     NUMBER := &n;
+    fact    NUMBER := 1;
+BEGIN
+    FOR i IN 1..num LOOP
+        fact := fact * i;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE('Factorial of ' || num || ' is: ' || fact);
+END;
+/
+
+ouput:
+SQL> @C:\Users\sarth\OneDrive\Documents\E-books\Factorial.sql
+Enter a number: 6
+old   2:     num     NUMBER := &n;
+new   2:     num     NUMBER :=          6;
+Factorial of 6 is: 720
+
+PL/SQL procedure successfully completed.
+
+SQL>

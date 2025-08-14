@@ -1,0 +1,91 @@
+Question:
+35.Consider the following relational schemaEmployee
+(empno,name,office,age)Books(isbn,title,authors,publisher)Loan(empno, isbn,date)
+Write the following queries in relational algebra.
+a.Find the names of employees who have borrowed a book Published byMcGraw-Hill.
+b.Find the names of employees who have borrowed all books Published byMcGraw-Hill.
+c.Find the names of employees who have borrowed more than five different books
+published by McGraw-Hill.
+d.For each publisher, find the names of employees who have borrowed more than five
+books of that publisher
+
+Practical :
+mysql> create table schemaEmployee
+    -> (empno,name,office,age);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',name,office,age)' at line 2
+mysql> create table schemaEmployee(empno int,name varchar(20),office varchar(20),age int);
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> create table Books(isbn int ,title varchar(20),authors varchar(20),publisher varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table Loan(empno int, isbn int,date date);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO schemaEmployee (empno, name, office, age) VALUES
+    -> (1, 'Amit', 'Mumbai', 30),
+    -> (2, 'Ankita', 'Pune', 28),
+    -> (3, 'Arjun', 'Delhi', 35),
+    -> (4, 'Ayesha', 'Bangalore', 32),
+    -> (5, 'Akira', 'Chennai', 29);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Books (isbn, title, authors, publisher) VALUES
+    -> (101, 'DBMS Concepts', 'Korth', 'McGraw-Hill'),
+    -> (102, 'Data Structures', 'Seymour', 'McGraw-Hill'),
+    -> (103, 'Operating Systems', 'Silberschatz', 'Pearson'),
+    -> (104, 'Networking', 'Tanenbaum', 'McGraw-Hill'),
+    -> (105, 'Java Programming', 'Deitel', 'Pearson'),
+    -> (106, 'Python Basics', 'Guido', 'McGraw-Hill'),
+    -> (107, 'Algorithms', 'Cormen', 'McGraw-Hill'),
+    -> (108, 'AI Fundamentals', 'Russell', 'Pearson');
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Loan (empno, isbn, date) VALUES
+    -> (1, 101, '2025-08-01'),
+    -> (1, 102, '2025-08-02'),
+    -> (1, 104, '2025-08-05'),
+    -> (1, 106, '2025-08-06'),
+    -> (1, 107, '2025-08-08'),
+    -> (2, 101, '2025-08-01'),
+    -> (2, 102, '2025-08-03'),
+    -> (3, 103, '2025-08-02'),
+    -> (3, 105, '2025-08-04'),
+    -> (4, 104, '2025-08-05'),
+    -> (4, 106, '2025-08-06'),
+    -> (4, 107, '2025-08-07'),
+    -> (5, 101, '2025-08-01'),
+    -> (5, 102, '2025-08-02'),
+    -> (5, 104, '2025-08-03'),
+    -> (5, 106, '2025-08-04'),
+    -> (5, 107, '2025-08-05');
+Query OK, 17 rows affected (0.01 sec)
+Records: 17  Duplicates: 0  Warnings: 0
+
+mysql> select distinct e.name from schemaemployee e join loan l on e.empno=l.empno join books b on l.isbn=b.isbn where b.publisher='McGraw-Hill';
++--------+
+| name   |
++--------+
+| Amit   |
+| Ankita |
+| Ayesha |
+| Akira  |
++--------+
+4 rows in set (0.01 sec)
+
+mysql> select e.name from schemaemployee e where not exists (select 1 from books b where b.publisher='McGraw-Hill' and not exists (select 1 from loan l where l.empno=e.empno and l.isbn=b.isbn));
++-------+
+| name  |
++-------+
+| Amit  |
+| Akira |
++-------+
+2 rows in set (0.01 sec)
+
+mysql> select e.name from schemaemployee e join loan l on e.empno=l.empno join books b on l.isbn=b.isbn where b.publisher='McGraw-Hill' group by e.empno, e.name having count(distinct b.isbn)>5;
+Empty set (0.04 sec)
+
+mysql> select b.publisher, e.name from schemaemployee e join loan l on e.empno=l.empno join books b on l.isbn=b.isbn group by b.publisher, e.empno, e.name having count(l.isbn)>5;
+Empty set (0.03 sec)

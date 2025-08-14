@@ -1,0 +1,73 @@
+Question:
+Consider following database Cricket_play(p_id, Name, Address) Matches(Match_code,
+match_date, match_place) Score(p_id, match_code, score) Write following queries in SQL
+i) List player name, match_date, match_place, and score of each player
+4
+ii) List all those players, whose maximum score is higher than 50 
+
+Practical:
+mysql> use demo;
+Database changed
+mysql> create table Cricket_play (
+    ->     p_id int primary key,
+    ->     Name varchar(30),
+    ->     Address varchar(50)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table Matches (
+    ->     Match_code int primary key,
+    ->     match_date date,
+    ->     match_place varchar(50)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> create table Score (
+    ->     p_id int,
+    ->     match_code int,
+    ->     score int,
+    ->     primary key(p_id, match_code),
+    ->     foreign key (p_id) references Cricket_play(p_id),
+    ->     foreign key (match_code) references Matches(Match_code)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into Cricket_play values
+    -> (101, 'Amit', 'Mumbai'),
+    -> (102, 'Rahul', 'Delhi'),
+    -> (103, 'Suresh', 'Pune');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into Matches values
+    -> (201, '2025-08-01', 'Mumbai'),
+    -> (202, '2025-08-03', 'Delhi'),
+    -> (203, '2025-08-05', 'Pune');
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into Score values
+    -> (101, 201, 60),
+    -> (101, 202, 45),
+    -> (102, 201, 30),
+    -> (102, 203, 55),
+    -> (103, 202, 70),
+    -> (103, 203, 40);
+Query OK, 6 rows affected (0.03 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select c.Name, m.match_date, m.match_place, s.score
+    -> from Cricket_play c
+    -> join Score s on c.p_id = s.p_id
+    -> join Matches m on s.match_code = m.Match_code;
++--------+------------+-------------+-------+
+| Name   | match_date | match_place | score |
++--------+------------+-------------+-------+
+| Amit   | 2025-08-01 | Mumbai      |    60 |
+| Amit   | 2025-08-03 | Delhi       |    45 |
+| Rahul  | 2025-08-01 | Mumbai      |    30 |
+| Rahul  | 2025-08-05 | Pune        |    55 |
+| Suresh | 2025-08-03 | Delhi       |    70 |
+| Suresh | 2025-08-05 | Pune        |    40 |
++--------+------------+-------------+-------+
+6 rows in set (0.03 sec)

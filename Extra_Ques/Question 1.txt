@@ -1,0 +1,79 @@
+Question:
+Consider , the following database,
+Student(RollNo, Name, Address)
+Subject (Sub_code, Sub_name)
+Marks (Roll_no, Sub_code, Marks)
+
+ Write the following queries in SQL.
+Find the average marks of each student, along with name of Student
+
+Practical Representation:
+Microsoft Windows [Version 10.0.22631.5624]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database demo;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> use demo;
+Database changed
+mysql> create table Student(RollNo int, Name varchar(10), Address varchar(20));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> create table Subject (Sub_code int, Sub_name varchar(10));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table Marks (Roll_no int, Sub_code int, Marks int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select s.RollNo,s.Name, AVG(m.Marks) as Avg_Marks from Student s join Marks m on s.RollNo = m.Roll_no group by s.RollNo,s.Name;
+Empty set (0.07 sec)
+
+mysql> INSERT INTO Student (RollNo, Name, Address) VALUES
+    -> (1, 'Amit', 'Pune'),
+    -> (2, 'Priya', 'Mumbai'),
+    -> (3, 'Rahul', 'Delhi');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Subject (Sub_code, Sub_name) VALUES
+    -> (101, 'CS'),
+    -> (102, 'Maths'),
+    -> (103, 'Physics');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Marks (Roll_no, Sub_code, Marks) VALUES
+    -> (1, 101, 85),
+    -> (1, 102, 78),
+    -> (1, 103, 92),
+    -> (2, 101, 70),
+    -> (2, 102, 75),
+    -> (2, 103, 80),
+    -> (3, 101, 60),
+    -> (3, 102, 65);
+Query OK, 8 rows affected (0.03 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select s.RollNo,s.Name, AVG(m.Marks) as Avg_Marks from Student s join Marks m on s.RollNo = m.Roll_no group by s.RollNo,s.Name;
++--------+-------+-----------+
+| RollNo | Name  | Avg_Marks |
++--------+-------+-----------+
+|      1 | Amit  |   85.0000 |
+|      2 | Priya |   75.0000 |
+|      3 | Rahul |   62.5000 |
++--------+-------+-----------+
+3 rows in set (0.03 sec)

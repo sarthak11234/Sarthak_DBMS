@@ -1,0 +1,167 @@
+Question:
+Write SQL statement for the following (any five)
+Consider the following database
+pilot(pid, pname)
+flight(fid, ftype, capacity)
+route(pid, fid, from_city, to_city)
+i) List the details of flights having capacity more than 300
+ii) List the flights between ‘Surat’ and ‘Mumbai’
+iii) List the names of pilots who fly from ‘Pune’
+iv) List the route on which , pilot ‘Mr Kapoor ’ flies
+v) List the pilots whose names . starts with letter ‘A %’ but does not end with letter ‘A’
+
+
+Practical implementation:
+
+mysql> create database airport;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use airport;
+Database changed
+mysql> create table pilot(pid int, pname varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table flight(fid int, ftype varchar(20), capacity int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table route(pid int , fid int, from_city varchar(20), to_city varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> alter table pilot add primary key(pid);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table flight add primary key(fid);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table route
+    -> add foreign key (pid) references pilot(pid)
+    -> add foreign key (fid) references flight(pid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add foreign key (fid) references flight(pid)' at line 3
+mysql> alter table route
+    -> add foreign key (pid) references pilot(pid),
+    -> add foreign key (fid) references flight(pid);
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'pid' for constraint 'route_ibfk_2' in the referenced table 'flight'
+mysql> alter table route
+    -> add foreign key (pid) references pilot(pid),
+    -> add foreign key (fid) references flight(fid);
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from flight where capacity > 3000;
+Empty set (0.01 sec)
+
+mysql> INSERT INTO pilot (pid, pname) VALUES
+    -> (1, 'Rajesh Kumar'),
+    -> (2, 'Anita Sharma'),
+    -> (3, 'John Fernandes'),
+    -> (4, 'Meena Singh');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO flight (fid, ftype, capacity) VALUES
+    -> (101, 'Airbus A320', 180),
+    -> (102, 'Boeing 737', 220),
+    -> (103, 'Boeing 777', 396),
+    -> (104, 'Airbus A380', 525),
+    -> (105, 'Embraer E175', 88);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO route (pid, fid, from_city, to_city) VALUES
+    -> (1, 101, 'Delhi', 'Mumbai'),
+    -> (2, 102, 'Mumbai', 'Bengaluru'),
+    -> (3, 103, 'Delhi', 'Dubai'),
+    -> (4, 104, 'Chennai', 'London'),
+    -> (1, 105, 'Pune', 'Hyderabad');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from flight where capacity > 3000;
+Empty set (0.00 sec)
+
+mysql> select * from flight where capacity > 300;
++-----+-------------+----------+
+| fid | ftype       | capacity |
++-----+-------------+----------+
+| 103 | Boeing 777  |      396 |
+| 104 | Airbus A380 |      525 |
++-----+-------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO route (pid, fid, from_city, to_city)
+    -> VALUES (2, 102, 'Surat', 'Mumbai');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select fid from route where from_city='Surat' and to_city='Mumbai';
++------+
+| fid  |
++------+
+|  102 |
++------+
+1 row in set (0.01 sec)
+
+mysql> select pname from pilot where pid in(select pid from route where from_city='Pune';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select pname from pilot where pid in(select pid from route where from_city='Pune');
++--------------+
+| pname        |
++--------------+
+| Rajesh Kumar |
++--------------+
+1 row in set (0.01 sec)
+
+mysql> INSERT INTO pilot (pid, pname) VALUES (5, 'Mr Kapoor');
+Query OK, 1 row affected (0.01 sec)
+
+mysql>
+mysql> INSERT INTO flight (fid, ftype, capacity) VALUES
+    -> (106, 'Boeing 747', 416);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO route (pid, fid, from_city, to_city)
+    -> VALUES (5, 106, 'Delhi', 'New York');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from route where pid=( select pid from pilot where pname='Mr Kapoor');
++------+------+-----------+----------+
+| pid  | fid  | from_city | to_city  |
++------+------+-----------+----------+
+|    5 |  106 | Delhi     | New York |
++------+------+-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from pilot where pname like 'A%' and pname not like '%A';
+Empty set (0.01 sec)
+
+mysql> INSERT INTO pilot (pid, pname) VALUES
+    -> (1, 'Amit'),
+    -> (2, 'Ankita'),
+    -> (3, 'Arjun'),
+    -> (4, 'Ayesha'),
+    -> (5, 'Akira');
+ERROR 1062 (23000): Duplicate entry '1' for key 'pilot.PRIMARY'
+mysql> select * from pilot where pname like 'A%' and pname not like '%A';
+Empty set (0.00 sec)
+
+mysql> INSERT INTO pilot (pid, pname) VALUES
+    -> (6, 'Amit'),
+    -> (7, 'Ankita'),
+    -> (8, 'Arjun'),
+    -> (9, 'Ayesha'),
+    -> (10, 'Akira');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from pilot where pname like 'A%' and pname not like '%A';
++-----+-------+
+| pid | pname |
++-----+-------+
+|   6 | Amit  |
+|   8 | Arjun |
++-----+-------+
+2 rows in set (0.00 sec)
+
+mysql>
+

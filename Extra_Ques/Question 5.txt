@@ -1,0 +1,146 @@
+Question:
+
+34.Consider the following tables:Employee (Emp_no, Name, Emp_city)Company (Emp_no,
+Company_name, Salary)
+i.Write a SQL query to display Employeename and company name.
+ii.Write a SQL query to display employeename, employee city ,company name andsalary
+of all the employees whose salary>10000
+iii.Write a query to display all the employees working in “XYZ company
+
+Practical Execution:
+Microsoft Windows [Version 10.0.22631.5624]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database abc;
+Query OK, 1 row affected (0.08 sec)
+
+mysql> use abc;
+Database changed
+mysql> create table Employee (Emp_no int, Name varchar(20), Emp_city varchar(20));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> create table Company (Emp_no,
+    ->
+    -> \
+    -> \c
+mysql> create table Company (Emp_no int ,Company_name varchar(20), Salary int);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO Employee (Emp_no, Name, Emp_city) VALUES
+    -> (1, 'Amit', 'Mumbai'),
+    -> (2, 'Ankita', 'Pune'),
+    -> (3, 'Arjun', 'Delhi'),
+    -> (4, 'Ayesha', 'Bangalore'),
+    -> (5, 'Akira', 'Chennai');
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Company (Emp_no, Company_name, Salary) VALUES
+    -> (1, 'Infosys', 50000),
+    -> (2, 'TCS', 55000),
+    -> (3, 'Wipro', 48000),
+    -> (4, 'Google', 120000),
+    -> (5, 'Amazon', 110000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select Name , Company_name from Employee,Company;
++--------+--------------+
+| Name   | Company_name |
++--------+--------------+
+| Akira  | Infosys      |
+| Ayesha | Infosys      |
+| Arjun  | Infosys      |
+| Ankita | Infosys      |
+| Amit   | Infosys      |
+| Akira  | TCS          |
+| Ayesha | TCS          |
+| Arjun  | TCS          |
+| Ankita | TCS          |
+| Amit   | TCS          |
+| Akira  | Wipro        |
+| Ayesha | Wipro        |
+| Arjun  | Wipro        |
+| Ankita | Wipro        |
+| Amit   | Wipro        |
+| Akira  | Google       |
+| Ayesha | Google       |
+| Arjun  | Google       |
+| Ankita | Google       |
+| Amit   | Google       |
+| Akira  | Amazon       |
+| Ayesha | Amazon       |
+| Arjun  | Amazon       |
+| Ankita | Amazon       |
+| Amit   | Amazon       |
++--------+--------------+
+25 rows in set (0.03 sec)
+
+mysql> select Name from Employee and Company_name from Company;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and Company_name from Company' at line 1
+mysql> Select
+    -> Name from Employee,
+    -> Company_name from Company;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Company' at line 3
+mysql> select e.Name,c.Company_name
+    -> from Employee e,
+    -> Company c
+    -> where e.Emp_no = c.Emp_no;
++--------+--------------+
+| Name   | Company_name |
++--------+--------------+
+| Amit   | Infosys      |
+| Ankita | TCS          |
+| Arjun  | Wipro        |
+| Ayesha | Google       |
+| Akira  | Amazon       |
++--------+--------------+
+5 rows in set (0.03 sec)
+
+mysql> select e.Name as EmployeeName,
+    -> e.Emp_city as EmployeeCity,
+    -> c.Company_name as CompanyName,
+    -> c.salary
+    -> from Employee e
+    -> join Company c
+    -> on e.Emp_no = c.Emp_no
+    -> where c.Salary > 10000;
++--------------+--------------+-------------+--------+
+| EmployeeName | EmployeeCity | CompanyName | salary |
++--------------+--------------+-------------+--------+
+| Amit         | Mumbai       | Infosys     |  50000 |
+| Ankita       | Pune         | TCS         |  55000 |
+| Arjun        | Delhi        | Wipro       |  48000 |
+| Ayesha       | Bangalore    | Google      | 120000 |
+| Akira        | Chennai      | Amazon      | 110000 |
++--------------+--------------+-------------+--------+
+5 rows in set (0.01 sec)
+
+mysql> select Name as EmployeeName,
+    -> Emp_city as EmployeeCity
+    -> from Employee
+    -> where Emp_no in(
+    -> select Emp_no
+    -> from Company
+    -> where Company_name = 'Google'
+    -> );
++--------------+--------------+
+| EmployeeName | EmployeeCity |
++--------------+--------------+
+| Ayesha       | Bangalore    |
++--------------+--------------+
+1 row in set (0.01 sec)

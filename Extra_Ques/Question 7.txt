@@ -1,0 +1,116 @@
+Question:
+Write the following inserts, deletes or updates in SQL, using the university schema.
+a. Increase the salary of each instructor in the Comp. Sci. department by 10 %.
+b. Delete all courses that have never been offered (that is, do not occur in the section
+relation).
+c. Insert every student whose tot cred attribute is greater than 100 as an instructor in the
+same department, with a salary of $10,000.
+
+Practical:
+mysql> create database A;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use A;
+Database changed
+mysql> create table department(
+    ->     dept_name varchar(20) primary key,
+    ->     building varchar(20),
+    ->     budget numeric(12,2)
+    -> );
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> create table instructor(
+    ->     ID int primary key,
+    ->     name varchar(30),
+    ->     dept_name varchar(20),
+    ->     salary numeric(10,2),
+    ->     foreign key (dept_name) references department(dept_name)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>
+mysql>
+mysql> create table course(
+    ->     course_id varchar(10) primary key,
+    ->     title varchar(50),
+    ->     dept_name varchar(20),
+    ->     credits int,
+    ->     foreign key (dept_name) references department(dept_name)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table section(
+    ->     course_id varchar(10),
+    ->     sec_id varchar(5),
+    ->     semester varchar(10),
+    ->     year int,
+    ->     primary key(course_id, sec_id, semester, year),
+    ->     foreign key(course_id) references course(course_id)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table student(
+    ->     ID int primary key,
+    ->     name varchar(30),
+    ->     dept_name varchar(20),
+    ->     tot_cred int,
+    ->     foreign key (dept_name) references department(dept_name)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into department values
+    -> ('Comp. Sci.', 'CS Building', 500000),
+    -> ('Math', 'Math Building', 300000),
+    -> ('Physics', 'Physics Building', 200000);
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into instructor values
+    -> (1, 'Alice', 'Comp. Sci.', 70000),
+    -> (2, 'Bob', 'Math', 60000),
+    -> (3, 'Charlie', 'Physics', 65000);
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into course values
+    -> ('CS101', 'Intro to CS', 'Comp. Sci.', 4),
+    -> ('CS102', 'Data Structures', 'Comp. Sci.', 3),
+    -> ('MATH101', 'Calculus I', 'Math', 4),
+    -> ('PHYS101', 'Physics I', 'Physics', 3),
+    -> ('CS103', 'Algorithms', 'Comp. Sci.', 3);
+Query OK, 5 rows affected (0.04 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into section values
+    -> ('CS101','001','Fall',2025),
+    -> ('CS102','001','Fall',2025),
+    -> ('MATH101','001','Fall',2025);
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into student values
+    -> (101, 'David', 'Comp. Sci.', 120),
+    -> (102, 'Eva', 'Math', 90),
+    -> (103, 'Frank', 'Physics', 110);
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> update instructor
+    -> set salary = salary * 1.10
+    -> where dept_name = 'Comp. Sci.';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> delete from course
+    -> where course_id not in (
+    ->     select distinct course_id
+    ->     from section
+    -> );
+Query OK, 2 rows affected (0.04 sec)
+
+mysql> insert into instructor(ID, name, dept_name, salary)
+    -> select ID, name, dept_name, 10000
+    -> from student
+    -> where tot_cred > 100;
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
