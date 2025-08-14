@@ -1,0 +1,80 @@
+Question :
+ Consider relational schema Employee (Empno, Ename, DeptNo, Salary),
+Department(DeptNo, Dname) Write SQL Queries for following questions (any two)
+i) List Employee Names of Computer Department
+ii) Find average salary of each department
+
+Practical:
+mysql> use demo;
+Database changed
+mysql> create table Department (
+    ->     DeptNo int primary key,
+    ->     Dname varchar(30)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table Employee (
+    ->     Empno int primary key,
+    ->     Ename varchar(30),
+    ->     DeptNo int,
+    ->     Salary numeric(10,2),
+    ->     foreign key (DeptNo) references Department(DeptNo)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into Department values
+    -> (1, 'Computer'),
+    -> (2, 'Math'),
+    -> (3, 'Physics');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into Employee values
+    -> (101, 'Amit', 1, 70000),
+    -> (102, 'Rahul', 1, 65000),
+    -> (103, 'Suresh', 2, 60000),
+    -> (104, 'Ankita', 3, 62000),
+    -> (105, 'Riya', 1, 75000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> delete from Employee
+    -> where DeptNo in (
+    ->     select DeptNo
+    ->     from Department
+    ->     where Dname = 'Math'
+    -> );
+Query OK, 1 row affected (0.02 sec)
+
+mysql> update Employee
+    -> set Salary = Salary * 1.10
+    -> where DeptNo = (
+    ->     select DeptNo
+    ->     from Department
+    ->     where Dname = 'Computer'
+    -> );
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * Department;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Department' at line 1
+mysql> select * from Department;
++--------+----------+
+| DeptNo | Dname    |
++--------+----------+
+|      1 | Computer |
+|      2 | Math     |
+|      3 | Physics  |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Employee;
++-------+--------+--------+----------+
+| Empno | Ename  | DeptNo | Salary   |
++-------+--------+--------+----------+
+|   101 | Amit   |      1 | 77000.00 |
+|   102 | Rahul  |      1 | 71500.00 |
+|   104 | Ankita |      3 | 62000.00 |
+|   105 | Riya   |      1 | 82500.00 |
++-------+--------+--------+----------+
+4 rows in set (0.00 sec)

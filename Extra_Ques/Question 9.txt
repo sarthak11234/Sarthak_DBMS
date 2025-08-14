@@ -1,0 +1,70 @@
+Question :
+Suppose that we have a relation marks(ID, score) and we wish to assign grades to
+students based on the score as follows: grade F if score < 40 , grade C if 40 ≤ score < 60,
+grade B if 60 ≤ score < 80, and grade A if 80 ≤ score. Write SQL queries to do the
+following: a. Display the grade for each student, based on the marks relation. b. Find the
+number of students with each grade
+
+Practical:
+Microsoft Windows [Version 10.0.22631.5624]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create table marks (
+    ->     ID int primary key,
+    ->     score int
+    -> );
+ERROR 1046 (3D000): No database selected
+mysql> use A;
+Database changed
+mysql> create table marks (
+    ->     ID int primary key,
+    ->     score int
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into marks values
+    -> (101, 35),
+    -> (102, 55),
+    -> (103, 65),
+    -> (104, 85),
+    -> (105, 75),
+    -> (106, 40),
+    -> (107, 90);
+Query OK, 7 rows affected (0.03 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select ID,
+    ->        score,
+    ->        case
+    ->            when score < 40 then 'F'
+    ->            when score >= 40 and score < 60 then 'C'
+    ->            when score >= 60 and score < 80 then 'B'
+    ->            when score >= 80 then 'A'
+    ->        end as grade
+    -> from marks;
++-----+-------+-------+
+| ID  | score | grade |
++-----+-------+-------+
+| 101 |    35 | F     |
+| 102 |    55 | C     |
+| 103 |    65 | B     |
+| 104 |    85 | A     |
+| 105 |    75 | B     |
+| 106 |    40 | C     |
+| 107 |    90 | A     |
++-----+-------+-------+
+7 rows in set (0.01 sec)
