@@ -1,0 +1,72 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Thu Sep 4 09:55:08 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Thu Sep 04 2025 09:52:29 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table student_mark(roll_no int, name varchar(50), total_mark int);
+
+Table created.
+
+SQL> insert into student_mark values (101, 'Vedant', 580);
+
+1 row created.
+
+SQL> insert into student_mark values (102, 'Ayush', 300);
+
+1 row created.
+
+SQL> insert into student_mark values (103, 'Aryan', 400);
+
+1 row created.
+
+SQL> create table student_result(roll_no int, name varchar2(50), grade varchar(20));
+
+Table created.
+
+SQL> @C:\Users\System05\Documents\sqlplus\Program1.sql
+
+Procedure created.
+
+SQL> set serveroutput on
+SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
+Enter value for r: 101
+old   7: r:=&r;
+new   7: r:=101;
+101 Vedant 1st class with dist.
+one record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
+Enter value for r: 102
+old   7: r:=&r;
+new   7: r:=102;
+102 Ayush 2nd class
+one record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
+Enter value for r: 103
+old   7: r:=&r;
+new   7: r:=103;
+103 Aryan 1st class
+one record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from student_result1;
+
+    ROLLNO NAME                 GRADE
+---------- -------------------- --------------------
+       101 Vedant               1st class with dist.
+       102 Ayush                2nd class
+       103 Aryan                1st class
