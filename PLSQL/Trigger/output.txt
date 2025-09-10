@@ -1,0 +1,197 @@
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 10 21:58:58 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Sep 10 2025 21:52:44 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table clientmaster ( srno int , name varchar (20));
+create table clientmaster ( srno int , name varchar (20))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> DROP TABLE clientmaster;
+
+Table dropped.
+
+SQL> create table clientmaster ( srno int , name varchar (20));
+
+Table created.
+
+SQL> create table audit_t as select * from clientmaster;
+create table audit_t as select * from clientmaster
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> DROP TABLE audit_t;
+
+Table dropped.
+
+SQL> create table audit_t as select * from clientmaster;
+
+Table created.
+
+SQL> insert into clientmaster (srno , name ) values ( 101 ,'Sarthak') ;
+
+1 row created.
+
+SQL> insert into clientmaster (srno , name ) values ( 102 ,'AtharvaShree') ;
+
+1 row created.
+
+SQL> insert into clientmaster (srno , name ) values ( 103 ,'Om') ;
+
+1 row created.
+
+SQL> @ C:\Users\sarth\OneDrive\Desktopaudit_insert.sql
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktopaudit_insert.sql"
+SQL> @ C:\Users\sarth\OneDrive\Desktop\audit_insert.sql
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\audit_insert.sql"
+SQL> cd C:\Users\sarth\OneDrive\Desktop
+SP2-0734: unknown command beginning "cd C:\User..." - rest of line ignored.
+SQL> @C:\Users\sarth\OneDrive\Desktop\audit_insert.sql
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\audit_insert.sql"
+SQL> @"C:\Users\sarth\OneDrive\Desktop\audit_insert.sql"
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\audit_insert.sql"
+SQL> @ "C:\Users\sarth\OneDrive\Desktop\C++ Array\audit_insert.sql"
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\C++ Array\audit_insert.sql"
+SQL> @ "C:\Users\sarth\OneDrive\Desktop\C++ Array\audit_insert.sql.txt"
+
+Trigger created.
+
+SQL>  select * from clientmaster
+  2  ;
+
+      SRNO NAME
+---------- --------------------
+       101 Sarthak
+       102 AtharvaShree
+       103 Om
+
+SQL> select  * from audit_t
+  2  ;
+
+no rows selected
+
+SQL> select * from clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       101 Sarthak
+       102 AtharvaShree
+       103 Om
+
+SQL> select  * from audit_t;
+
+no rows selected
+
+SQL> select  * from audit_t
+  2    2  ;
+  2
+  *
+ERROR at line 2:
+ORA-00933: SQL command not properly ended
+
+
+SQL> select  * from audit_t
+  2  ;
+
+no rows selected
+
+SQL> update clientmaster set srno = 104 where name = 'Om';
+
+1 row updated.
+
+SQL> select * from clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       101 Sarthak
+       102 AtharvaShree
+       104 Om
+
+SQL> select * from audit_t
+  2  ;
+
+no rows selected
+
+SQL> insert into audit_t
+  2  select * from clientmaster;
+insert into audit_t
+            *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -200000 is out
+of range
+ORA-06512: at "SYSTEM.AUDIT_INSERT", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.AUDIT_INSERT'
+
+
+SQL>
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from audit_t
+  2  ;
+
+no rows selected
+
+SQL> select * from audit_t;
+
+no rows selected
+
+SQL> insert into audit_t
+  2  select * from clientmaster;
+insert into audit_t
+            *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -200000 is out
+of range
+ORA-06512: at "SYSTEM.AUDIT_INSERT", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.AUDIT_INSERT'
+
+
+SQL>
+SQL> commit;
+
+Commit complete.
+
+SQL> insert into audit_t select * from clinemaster;
+insert into audit_t select * from clinemaster
+                                  *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> insert into audit_t select * from clientmaster;
+insert into audit_t select * from clientmaster
+            *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -200000 is out
+of range
+ORA-06512: at "SYSTEM.AUDIT_INSERT", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.AUDIT_INSERT'
+
+
+SQL> create table audit_t as select * from clientmaster;
+create table audit_t as select * from clientmaster
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> select * from audit_t
+  2  ;
+
+no rows selected
