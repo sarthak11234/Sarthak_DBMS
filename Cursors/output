@@ -1,0 +1,114 @@
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Sun Sep 14 19:13:42 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Sep 10 2025 21:59:03 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> CREATE TABLE product (
+  2     product_id INT PRIMARY KEY,
+  3     name VARCHAR2(50),
+  4     price NUMBER
+  5  );
+
+Table created.
+
+SQL>
+SQL> INSERT INTO product VALUES (101, 'Laptop', 55000);
+
+1 row created.
+
+SQL> INSERT INTO product VALUES (102, 'Mobile', 25000);
+
+1 row created.
+
+SQL> INSERT INTO product VALUES (103, 'Tablet', 30000);
+
+1 row created.
+
+SQL> INSERT INTO product VALUES (104, 'Headphones', 2000);
+
+1 row created.
+
+SQL>
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\implicit.sql
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\implicit.sql
+Product name = Laptop
+Row found!
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\explicit.sql
+101-Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\explicit.sql
+101-Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\explicit.sql
+101-Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\explicit.sql
+101-Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\for.sql
+101-Laptop
+102-Mobile
+103-Tablet
+104-Headphones
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> C:\Users\sarth\OneDrive\Desktop\parameterized.sql
+SP2-0023: String not found.
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\parametrized.sql
+SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\parametrized.sql"
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\parameterized.sql
+Laptop
+Mobile
+Tablet
+Headphones
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\ref.sql
+Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> @C:\Users\sarth\OneDrive\Desktop\forupdate.sql
+101 - Laptop updated
+102 - Mobile updated
+103 - Tablet updated
+104 - Headphones updated
+
+PL/SQL procedure successfully completed.
