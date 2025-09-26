@@ -1,0 +1,115 @@
+SQL*Plus: Release 21.0.0.0.0 - Production on Sun Sep 7 15:42:10 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Sun Sep 07 2025 14:54:23 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+
+SQL> CREATE TABLE borrower1 (Roll_no NUMBER(3) PRIMARY KEY,
+  2  Name VARCHAR2(50),
+  3  Date_of_Issue DATE,
+  4  NameOfBook VARCHAR2(100),
+  5  Status CHAR(1));  
+
+Table created.
+
+SQL> CREATE TABLE fine1 (
+  2      Roll_no   NUMBER(3),
+  3      FineDate  DATE,
+  4      Amt       NUMBER(6,2),
+  5      CONSTRAINT fk_roll FOREIGN KEY (Roll_no) REFERENCES borrower1(ROLL_NO)
+  6  );
+
+Table created.
+
+SQL> INSERT INTO borrower1 VALUES (101, 'Akash', TO_DATE('20-AUG-2025','DD-MON-YYYY'), 'C++', 'I');
+
+1 row created.
+
+SQL> INSERT INTO borrower1 VALUES (102, 'Meena', TO_DATE('05-AUG-2025','DD-MON-YYYY'), 'MATHS', 'I');
+
+1 row created.
+
+SQL> INSERT INTO borrower1 VALUES (103, 'Kiran', TO_DATE('12-AUG-2025','DD-MON-YYYY'), 'DSA', 'I');
+
+1 row created.
+
+SQL> INSERT INTO borrower1 VALUES (104, 'Rohan', TO_DATE('18-AUG-2025','DD-MON-YYYY'), 'OS', 'I');
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from borrower1;
+
+ROLL_NO NAME   DATE_OF_ISSUE   NAMEOFBOOK  STATUS
+------- ------ --------------- ----------  ------
+101     Akash  20-AUG-2025     C++         I
+102     Meena  05-AUG-2025     MATHS       I
+103     Kiran  12-AUG-2025     DSA         I
+104     Rohan  18-AUG-2025     OS          I
+
+
+SQL> set serveroutput on
+
+SQL> @C:\Users\Sarthak\Desktop\book1.sql
+Enter value for r: 101
+old   9:     R := &R;
+new   9:     R := 101;
+Enter value for bn: C++
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'C++';
+Fine: 150
+
+
+SQL> @C:\Users\Sarthak\Desktop\book1.sql
+Enter value for r: 102
+old   9:     R := &R;
+new   9:     R := 102;
+Enter value for bn: MATHS
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'MATHS';
+Fine: 800
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\Sarthak\Desktop\book1.sql
+Enter value for r: 103
+old   9:     R := &R;
+new   9:     R := 103;
+Enter value for bn: DSA
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'DSA';
+Fine: 950
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\Sarthak\Desktop\book1.sql
+Enter value for r: 104
+old   9:     R := &R;
+new   9:     R := 104;
+Enter value for bn: OS
+old  10:     Bn := '&Bn';
+new  10:     Bn := 'OS';
+Fine: 400
+
+PL/SQL procedure successfully completed.
+
+
+SQL> select * from fine1;
+
+ROLL_NO  FINEDATE   AMT
+-------  ---------  ----
+101      07-SEP-25  150
+102      07-SEP-25  800
+103      07-SEP-25  950
+104      07-SEP-25  400
