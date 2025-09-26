@@ -1,12 +1,11 @@
-
-SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 17 04:43:44 2025
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 17 10:12:15 2025
 Version 21.3.0.0.0
 
 Copyright (c) 1982, 2021, Oracle.  All rights reserved.
 
 Enter user-name: system
 Enter password:
-Last Successful login time: Sun Sep 14 2025 19:13:48 +05:30
+Last Successful login time: Wed Sep 17 2025 09:55:44 +05:30
 
 Connected to:
 Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
@@ -16,31 +15,17 @@ SQL> CREATE TABLE clientmaster (
   2     srno INT,
   3     name VARCHAR2(20)
   4  );
-CREATE TABLE clientmaster (
-             *
-ERROR at line 1:
-ORA-00955: name is already used by an existing object
-
-
-SQL> create table clientmaster( srno int, name varchar(20));
-create table clientmaster( srno int, name varchar(20))
-             *
-ERROR at line 1:
-ORA-00955: name is already used by an existing object
-
-
-SQL> DROP TABLE clientmaster CASCADE CONSTRAINTS;
-
-Table dropped.
-
-SQL> create table clientmaster( srno int, name varchar(20));
 
 Table created.
 
 SQL> CREATE TABLE audi (
   2     srno INT,
-  3     name VARCHAR2(20)
+  3     name VARCHAR2(50)
   4  );
+
+Table created.
+
+SQL> CREATE TABLE insertbackup AS SELECT * FROM clientmaster;
 
 Table created.
 
@@ -56,6 +41,10 @@ SQL> COMMIT;
 
 Commit complete.
 
+SQL> @C:\Users\sarth\OneDrive\Desktop\backup_trigger.sql
+
+Trigger created.
+
 SQL> UPDATE clientmaster SET name = 'Om' WHERE srno = 201;
 
 1 row updated.
@@ -66,32 +55,12 @@ SQL> DELETE FROM clientmaster WHERE srno = 202;
 
 SQL> SELECT * FROM audi;
 
-no rows selected
-
-SQL> @C:\Users\sarth\OneDrive\Desktop\trigger2.sql
-
-Trigger created.
-
-SQL> set server output on;
-SP2-0158: unknown SET option "server"
-SQL> set serveroutput on;
-SQL> UPDATE clientmaster SET name = 'Omi' WHERE srno = 201;
-
-1 row updated.
-
-SQL> DELETE FROM clientmaster WHERE srno = 203;
-
-0 rows deleted.
-
-SQL> SELECT * FROM audi;
-
       SRNO NAME
 ---------- --------------------
-       201 Om (UPDATED)
+       201 Sarthak (BACKUP)
+       202 Atharva (BACKUP)
 
-SQL> @C:\Users\sarth\OneDrive\Desktop\trigger1.sql
-SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\trigger1.sql"
-SQL> @C:\Users\sarth\OneDrive\Desktop\tigger1.sql
+SQL> @C:\Users\sarth\OneDrive\Desktop\insert_trigger.sql
 
 Trigger created.
 
@@ -99,16 +68,46 @@ SQL> INSERT INTO clientmaster VALUES (203, 'Rohit');
 
 1 row created.
 
-SQL>   2
+SQL> SELECT * FROM insertbackup;
+
+      SRNO NAME
+---------- --------------------
+       203 Rohit (INSERTED)
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\audit_insert.sql
+
+Trigger created.
+
+SQL> INSERT INTO audi VALUES (204, 'CheckTrigger');
+INSERT INTO audi VALUES (204, 'CheckTrigger')
+            *
+ERROR at line 1:
+ORA-20001: Cannot delete or insert in September
+ORA-06512: at "SYSTEM.INSERT_AUDIT_D", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.INSERT_AUDIT_D'
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\audit_update.sql
+
+Trigger created.
+
+SQL> UPDATE audi SET name = 'Suhas' WHERE srno = 204;
+UPDATE audi SET name = 'Suhas' WHERE srno = 204
+       *
+ERROR at line 1:
+ORA-20002: Cannot update or delete in September
+ORA-06512: at "SYSTEM.UPDATE_DELETE_AUDIT_D", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.UPDATE_DELETE_AUDIT_D'
+
+SQL> SELECT * FROM clientmaster;
+
+      SRNO NAME
+---------- --------------------
+       201 Om
+       203 Rohit
+
 SQL> SELECT * FROM audi;
 
       SRNO NAME
 ---------- --------------------
-       201 Om (UPDATED)
-
-SQL> select * from clientmaster;
-
-      SRNO NAME
----------- --------------------
-       201 Omi
-       203 Rohit
+       201 Sarthak (BACKUP)
+       202 Atharva (BACKUP)
