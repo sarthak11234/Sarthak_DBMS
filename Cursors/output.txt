@@ -85,13 +85,28 @@ SQL> @C:\Users\sarth\OneDrive\Desktop\for.sql
 PL/SQL procedure successfully completed.
 
 SQL> set serveroutput on;
-SQL> C:\Users\sarth\OneDrive\Desktop\parameterized.sql
-SP2-0023: String not found.
-SQL> set serveroutput on;
-SQL> @C:\Users\sarth\OneDrive\Desktop\parametrized.sql
-SP2-0310: unable to open file "C:\Users\sarth\OneDrive\Desktop\parametrized.sql"
-SQL> set serveroutput on;
 SQL> @C:\Users\sarth\OneDrive\Desktop\parameterized.sql
+Enter value for price_value: 20000
+old   8:    p := &price_value;
+new   8:    p := 20000;
+Laptop
+Mobile
+Tablet
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\parameterized.sql
+Enter value for price_value: 50000
+old   8:    p := &price_value;
+new   8:    p := 50000;
+Laptop
+
+PL/SQL procedure successfully completed.
+
+SQL> @C:\Users\sarth\OneDrive\Desktop\parameterized.sql
+Enter value for price_value: 1000
+old   8:    p := &price_value;
+new   8:    p := 1000;
 Laptop
 Mobile
 Tablet
@@ -111,5 +126,6 @@ SQL> @C:\Users\sarth\OneDrive\Desktop\forupdate.sql
 102 - Mobile updated
 103 - Tablet updated
 104 - Headphones updated
+
 
 PL/SQL procedure successfully completed.
