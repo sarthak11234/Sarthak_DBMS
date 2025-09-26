@@ -1,0 +1,68 @@
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 21
+Enter Name: Rohit
+Enter Address: Mumbai
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 22
+Enter Name: Sarthak
+Enter Address: Beed
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 23
+Enter Name: Prajakta
+Enter Address: Nashik
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 2
+Enter Roll No to Update: 22
+Enter New Name: Sarthaki
+Record Updated!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 3
+Enter Roll No to Delete: 22
+Record Deleted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 4
+Roll No	Name	Address
+21	Rohit	Mumbai
+23	Prajakta	Nashik
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
