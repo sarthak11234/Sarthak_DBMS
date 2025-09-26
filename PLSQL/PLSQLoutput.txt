@@ -37,36 +37,17 @@ Procedure created.
 
 SQL> set serveroutput on
 SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
-Enter value for r: 101
-old   7: r:=&r;
-new   7: r:=101;
 101 Vedant 1st class with dist.
-one record inserted
-
-PL/SQL procedure successfully completed.
-
-SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
-Enter value for r: 102
-old   7: r:=&r;
-new   7: r:=102;
 102 Ayush 2nd class
-one record inserted
-
-PL/SQL procedure successfully completed.
-
-SQL> @C:\Users\System05\Documents\sqlplus\Program2.sql
-Enter value for r: 103
-old   7: r:=&r;
-new   7: r:=103;
 103 Aryan 1st class
-one record inserted
+All records processed and inserted
 
 PL/SQL procedure successfully completed.
 
-SQL> select * from student_result1;
+SQL> select * from student_result;
 
     ROLLNO NAME                 GRADE
----------- -------------------- --------------------
+---------- -------------------- ------------------------
        101 Vedant               1st class with dist.
        102 Ayush                2nd class
        103 Aryan                1st class
