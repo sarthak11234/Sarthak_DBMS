@@ -1,4 +1,3 @@
-output:
 
 SQL*Plus: Release 21.0.0.0.0 - Production on Sun Sep 14 19:13:42 2025
 Version 21.3.0.0.0
@@ -129,3 +128,4 @@ SQL> @C:\Users\sarth\OneDrive\Desktop\forupdate.sql
 
 
 PL/SQL procedure successfully completed.
+
