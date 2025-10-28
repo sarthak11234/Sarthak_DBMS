@@ -1,0 +1,162 @@
+from pymongo import MongoClient
+
+client = MongoClient("mongodb://localhost:27017/")
+
+db_input = input("Enter the database name: ")
+db = client[db_input]
+db_collection = input("Enter collection name: ")
+collection = db[db_collection]
+print("Collection created successfully.\n")
+
+while True:
+    print("\n--- STUDENT MENU ---")
+    print("1. Add a student")
+    print("2. Display all students")
+    print("3. Search student by Roll No")
+    print("4. Delete student by Roll No")
+    print("5. Exit")
+    
+    try:
+        choice = int(input("Enter your choice: "))
+    except ValueError:
+        print("Please enter a valid number.")
+        continue
+
+    match choice:
+        case 1:
+            try:
+                roll_no = int(input("Enter Roll No (roll_no): "))
+                name = input("Enter Student Name (name): ")
+                gpa = float(input("Enter Student GPA (gpa): "))
+                
+                # Check if roll_no already exists
+                if collection.find_one({"roll_no": roll_no}):
+                    print(" A student with this Roll No already exists.")
+                else:
+                    record = {"roll_no": roll_no, "name": name, "gpa": gpa}
+                    collection.insert_one(record)
+                    print(" Student added successfully.")
+            except ValueError:
+                print(" Invalid input. Roll No must be a number and GPA must be a number.")
+
+        case 2:
+            print("\n--- All Students ---")
+            cursor = collection.find()
+            count = collection.count_documents({})
+            
+            if count == 0:
+                print("(No students found.)")
+            else:
+                for doc in cursor:
+                    print(f"Roll No: {doc['roll_no']} | Name: {doc['name']} | GPA: {doc['gpa']}")
+
+        case 3:
+            try:
+                search_roll = int(input("Enter Roll No to search: "))
+                result = collection.find_one({"roll_no": search_roll})
+                
+                if result:
+                    print(f" Student Found: Roll No={result['roll_no']}, Name={result['name']}, GPA={result['gpa']}")
+                else:
+                    print(" No student found with that Roll No.")
+            except ValueError:
+                print(" Invalid input. Roll No must be a number.")
+
+        case 4:
+            try:
+                delete_roll = int(input("Enter Roll No to delete: "))
+                result = collection.delete_one({"roll_no": delete_roll})
+                
+                if result.deleted_count > 0:
+                    print(" Student deleted successfully.")
+                else:
+                    print(" No student found with that Roll No.")
+            except ValueError:
+                print(" Invalid input. Roll No must be a number.")
+
+        case 5:
+            print(" Exiting program...")
+            break
+
+        case _:
+            print(" Invalid choice. Please try again.")
+
+client.close()
+
+
+Bash:
+Enter the database name: school_db
+Enter collection name: students
+Collection created successfully.
+
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Student added successfully.
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Student added successfully.
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Student added successfully.
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+
+--- All Students ---
+Roll No: 101 | Name: Rohan Sharma | GPA: 3.8
+Roll No: 102 | Name: Priya Patel | GPA: 3.9
+Roll No: 103 | Name: Amit Singh | GPA: 3.5
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Student Found: Roll No=103, Name=Amit Singh, GPA=3.5
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Student deleted successfully.
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+
+--- All Students ---
+Roll No: 101 | Name: Rohan Sharma | GPA: 3.8
+Roll No: 102 | Name: Priya Patel | GPA: 3.9
+
+--- STUDENT MENU ---
+1. Add a student
+2. Display all students
+3. Search student by Roll No
+4. Delete student by Roll No
+5. Exit
+ Exiting program...
