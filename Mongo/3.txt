@@ -1,0 +1,134 @@
+C:\Program Files\MongoDB\Server\8.2\bin>mongosh
+Current Mongosh Log ID: 69ef9c01234567890abcdef99
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.8
+Using MongoDB:          8.2.1
+Using Mongosh:          2.5.8
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+    The server generated these startup warnings when booting
+    2025-10-28T22:00:01.123+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> show dbs;
+admin          40.00 KiB
+config         72.00 KiB
+inventory_db   80.00 KiB
+local          72.00 KiB
+sales_db      120.00 KiB
+user_accounts  64.00 KiB
+test> use store_db;
+switched to db store_db
+store_db> db.createCollection("products");
+{ ok: 1 }
+store_db> db.products.insertOne({product_id:501,product_name:'Laptop',price:1200,category:'Electronics'});
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9c0a1234567890abcdefa0')
+}
+store_db> db.products.insertOne({product_id:502,product_name:'Coffee Maker',price:80,category:'Appliances'});
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9c0a1234567890abcdefa1')
+}
+store_db> db.products.insertOne({product_id:503,product_name:'Running Shoes',price:150,category:'Apparel'});
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9c0a1234567890abcdefa2')
+}
+store_db> db.products.insertOne({product_id:504,product_name:'Headphones',price:200,category:'Electronics'});
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9c0a1234567890abcdefa3')
+}
+store_db> db.products.aggregate([{$group:{_id:null,total_value:{$sum:'$price'}}}]);
+[ { _id: null, total_value: 1630 } ]
+store_db> db.products.aggregate([{$group:{_id:null,min_price:{$min:'$price'}}}]);
+[ { _id: null, min_price: 80 } ]
+store_db> db.products.aggregate([{$group:{_id:null,max_price:{$max:'$price'}}}]);
+[ { _id: null, max_price: 1200 } ]
+store_db> db.products.aggregate([{$group:{_id:null,all_prices:{$push:'$price'}}}]);
+[ { _id: null, all_prices: [ 1200, 80, 150, 200 ] } ]
+store_db> db.products.aggregate([{$group:{_id:null,avg_price:{$avg:'$price'}}}]);
+[ { _id: null, avg_price: 407.5 } ]
+store_db> db.products.aggregate([{$group:{_id:null,unique_prices:{$addToSet:'$price'}}}]);
+[ { _id: null, unique_prices: [ 200, 150, 80, 1200 ] } ]
+store_db> db.products.find().sort({product_name:1});
+[
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa1'),
+    product_id: 502,
+    product_name: 'Coffee Maker',
+    price: 80,
+    category: 'Appliances'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa3'),
+    product_id: 504,
+    product_name: 'Headphones',
+    price: 200,
+    category: 'Electronics'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa0'),
+    product_id: 501,
+    product_name: 'Laptop',
+    price: 1200,
+    category: 'Electronics'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa2'),
+    product_id: 503,
+    product_name: 'Running Shoes',
+    price: 150,
+    category: 'Apparel'
+  }
+]
+store_db> db.products.find().sort({product_name:-1});
+[
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa2'),
+    product_id: 503,
+    product_name: 'Running Shoes',
+    price: 150,
+    category: 'Apparel'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa0'),
+    product_id: 501,
+    product_name: 'Laptop',
+    price: 1200,
+    category: 'Electronics'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa3'),
+    product_id: 504,
+    product_name: 'Headphones',
+    price: 200,
+    category: 'Electronics'
+  },
+  {
+    _id: ObjectId('69ef9c0a1234567890abcdefa1'),
+    product_id: 502,
+    product_name: 'Coffee Maker',
+    price: 80,
+    category: 'Appliances'
+  }
+]
+store_db> db.products.createIndex({ product_id: 1 })
+product_id_1
+store_db> db.products.createIndex({ product_name: 1 })
+product_name_1
+store_db> db.products.createIndex({ price: 1 })
+price_1
+store_db> db.products.createIndex({ category: 1 })
+category_1
+store_db> db.products.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { product_id: 1 }, name: 'product_id_1' },
+  { v: 2, key: { product_name: 1 }, name: 'product_name_1' },
+  { v: 2, key: { price: 1 }, name: 'price_1' },
+  { v: 2, key: { category: 1 }, name: 'category_1' }
+]
