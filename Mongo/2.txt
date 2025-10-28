@@ -1,0 +1,373 @@
+Microsoft Windows [Version 10.0.22631.5624]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MongoDB\Server\8.2\bin>mongosh
+Current Mongosh Log ID: 69ef9a01234567890abcdef12
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.8
+Using MongoDB:          8.2.1
+Using Mongosh:          2.5.8
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+    The server generated these startup warnings when booting
+    2025-10-28T21:30:05.123+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use franchise_cricket_db;
+switched to db franchise_cricket_db
+franchise_cricket_db> db.createCollection("teams")
+{ ok: 1 }
+franchise_cricket_db> db.teams.insertMany([
+...    {
+...      team_id: 101,
+...      name: "Mumbai Indians",
+...      city: "Mumbai",
+...      captain: "Hardik Pandya",
+...      titles: 5
+...    },
+...    {
+...      team_id: 102,
+...      name: "Chennai Super Kings",
+...      city: "Chennai",
+...      captain: "Ruturaj Gaikwad",
+...      titles: 5
+...    },
+...    {
+...      team_id: 103,
+...      name: "Kolkata Knight Riders",
+...      city: "Kolkata",
+...      captain: "Shreyas Iyer",
+...      titles: 3
+...    }
+...  ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69ef9b0a1234567890abcdef34'),
+    '1': ObjectId('69ef9b0a1234567890abcdef35'),
+    '2': ObjectId('69ef9b0a1234567890abcdef36')
+  }
+}
+franchise_cricket_db> db.players.insertMany([
+...    {
+...      player_id: 7,
+...      name: "Virat Kohli",
+...      role: "Batsman",
+...      team: "Royal Challengers Bengaluru",
+...      batting_style: "Right-hand bat",
+...      matches_played: 250,
+...      runs: 8000,
+...      strike_rate: 131.02,
+...      wickets: 4
+...    },
+...    {
+...      player_id: 10,
+...      name: "Sunil Narine",
+...      role: "All-rounder",
+...      team: "Kolkata Knight Riders",
+...      batting_style: "Left-hand bat",
+...      bowling_style: "Right-arm offbreak",
+...      matches_played: 170,
+...      runs: 1500,
+...      strike_rate: 160.5,
+...      wickets: 180
+...    },
+...    {
+...      player_id: 77,
+...      name: "Shubman Gill",
+...      role: "Batsman",
+...      team: "Gujarat Titans",
+...      batting_style: "Right-hand bat",
+...      bowling_style: "Right-arm offbreak",
+...      matches_played: 100,
+...      runs: 3000,
+...      strike_rate: 140.1,
+...      wickets: 0
+...    },
+...    {
+...      player_id: 93,
+...      name: "Jasprit Bumrah",
+...      role: "Bowler",
+...      team: "Mumbai Indians",
+...      batting_style: "Right-hand bat",
+...      bowling_style: "Right-arm fast",
+...      matches_played: 130,
+...      runs: 100,
+...      strike_rate: 80.0,
+...      wickets: 150
+...    }
+...  ]);
+...
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69ef9b0a1234567890abcdef37'),
+    '1': ObjectId('69ef9b0a1234567890abcdef38'),
+    '2': ObjectId('69ef9b0a1234567890abcdef39'),
+    '3': ObjectId('69ef9b0a1234567890abcdef3a')
+  }
+}
+franchise_cricket_db> db.players.find();
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef37'),
+    player_id: 7,
+    name: 'Virat Kohli',
+    role: 'Batsman',
+    team: 'Royal Challengers Bengaluru',
+    batting_style: 'Right-hand bat',
+    matches_played: 250,
+    runs: 8000,
+    strike_rate: 131.02,
+    wickets: 4
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef38'),
+    player_id: 10,
+    name: 'Sunil Narine',
+    role: 'All-rounder',
+    team: 'Kolkata Knight Riders',
+    batting_style: 'Left-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 170,
+    runs: 1500,
+    strike_rate: 160.5,
+    wickets: 180
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef39'),
+    player_id: 77,
+    name: 'Shubman Gill',
+    role: 'Batsman',
+    team: 'Gujarat Titans',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 100,
+    runs: 3000,
+    strike_rate: 140.1,
+    wickets: 0
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef3a'),
+    player_id: 93,
+    name: 'Jasprit Bumrah',
+    role: 'Bowler',
+    team: 'Mumbai Indians',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm fast',
+    matches_played: 130,
+    runs: 100,
+    strike_rate: 80,
+    wickets: 150
+  }
+]
+franchise_cricket_db> db.teams.insertOne({
+...    team_id: 104,
+...    team_name: "Sunrisers Hyderabad",
+...    captain: "Pat Cummins",
+...    players: ["Pat Cummins", "Travis Head", "Abhishek Sharma", "Bhuvneshwar Kumar"]
+...  });
+...
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9b0a1234567890abcdef3b')
+}
+franchise_cricket_db> db.matches.insertOne({
+...    match_id: 501,
+...    teams: ["Mumbai Indians", "Chennai Super Kings"],
+...    toss: "Mumbai Indians",
+...    match_time: ISODate("2025-04-14T19:30:00Z"),
+...    result: "Chennai Super Kings won by 20 runs"
+...  });
+...
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9b0a1234567890abcdef3c')
+}
+franchise_cricket_db> db.matches.insertOne({
+...    match_id: 502,
+...    teams: ["Kolkata Knight Riders", "Royal Challengers Bengaluru"],
+...    toss: "Kolkata Knight Riders",
+...    match_time: ISODate("2025-04-21T15:30:00Z"),
+...    result: "Kolkata Knight Riders won by 1 run"
+...  });
+...
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9b0a1234567890abcdef3d')
+}
+franchise_cricket_db> db.matches.insertOne({
+...    match_id: 503,
+...    teams: ["Gujarat Titans", "Delhi Capitals"],
+...    toss: "Delhi Capitals",
+...    Match_Time: ISODate("2025-04-24T19:30:00Z"),
+...    result: "Match abandoned due to rain"
+...  });
+...
+{
+  acknowledged: true,
+  insertedId: ObjectId('69ef9b0a1234567890abcdef3e')
+}
+franchise_cricket_db> db.players.find({ strike_rate:{$gt:150}, role:"All-rounder" })
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef38'),
+    player_id: 10,
+    name: 'Sunil Narine',
+    role: 'All-rounder',
+    team: 'Kolkata Knight Riders',
+    batting_style: 'Left-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 170,
+    runs: 1500,
+    strike_rate: 160.5,
+    wickets: 180
+  }
+]
+franchise_cricket_db> db.players.updateOne( { player_id: 7 }, { $inc: { runs: 120, matches_played: 1 } } )
+...
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+franchise_cricket_db> db.matches.deleteOne({match_id:502})
+{ acknowledged: true, deletedCount: 1 }
+franchise_cricket_db> db.matches.deleteMany({result:"Match abandoned due to rain"})
+{ acknowledged: true, deletedCount: 1 }
+franchise_cricket_db> db.matches.find();
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef3c'),
+    match_id: 501,
+    teams: [ 'Mumbai Indians', 'Chennai Super Kings' ],
+    toss: 'Mumbai Indians',
+    match_time: ISODate('2025-04-14T19:30:00.000Z'),
+    result: 'Chennai Super Kings won by 20 runs'
+  }
+]
+franchise_cricket_db> db.players.find({
+...    $and: [
+...      { role: "Batsman" },
+...      { strike_rate: { $gt: 135 } }
+...    ]
+...  }).pretty();
+...
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef39'),
+    player_id: 77,
+    name: 'Shubman Gill',
+    role: 'Batsman',
+    team: 'Gujarat Titans',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 100,
+    runs: 3000,
+    strike_rate: 140.1,
+    wickets: 0
+  }
+]
+franchise_cricket_db> db.players.find({
+...    $or: [
+...      { role: "All-rounder" },
+...      { role: "Bowler" }
+...    ]
+...  }).pretty();
+...
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef38'),
+    player_id: 10,
+    name: 'Sunil Narine',
+    role: 'All-rounder',
+    team: 'Kolkata Knight Riders',
+    batting_style: 'Left-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 170,
+    runs: 1500,
+    strike_rate: 160.5,
+    wickets: 180
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef3a'),
+    player_id: 93,
+    name: 'Jasprit Bumrah',
+    role: 'Bowler',
+    team: 'Mumbai Indians',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm fast',
+    matches_played: 130,
+    runs: 100,
+    strike_rate: 80,
+    wickets: 150
+  }
+]
+franchise_cricket_db> db.players.find({
+...    $nor: [
+...      { team: "Mumbai Indians" },
+...      { team: "Kolkata Knight Riders" }
+...    ]
+...  }).pretty();
+...
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef37'),
+    player_id: 7,
+    name: 'Virat Kohli',
+    role: 'Batsman',
+    team: 'Royal Challengers Bengaluru',
+    batting_style: 'Right-hand bat',
+    matches_played: 251,
+    runs: 8120,
+    strike_rate: 131.02,
+    wickets: 4
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef39'),
+    player_id: 77,
+    name: 'Shubman Gill',
+    role: 'Batsman',
+    team: 'Gujarat Titans',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 100,
+    runs: 3000,
+    strike_rate: 140.1,
+    wickets: 0
+  }
+]
+franchise_cricket_db> db.players.find({
+...    wickets: { $not: { $gt: 10 } }
+...  }).pretty();
+...
+[
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef37'),
+    player_id: 7,
+    name: 'Virat Kohli',
+    role: 'Batsman',
+    team: 'Royal Challengers Bengaluru',
+    batting_style: 'Right-hand bat',
+    matches_played: 251,
+    runs: 8120,
+    strike_rate: 131.02,
+    wickets: 4
+  },
+  {
+    _id: ObjectId('69ef9b0a1234567890abcdef39'),
+    player_id: 77,
+    name: 'Shubman Gill',
+    role: 'Batsman',
+    team: 'Gujarat Titans',
+    batting_style: 'Right-hand bat',
+    bowling_style: 'Right-arm offbreak',
+    matches_played: 100,
+    runs: 3000,
+    strike_rate: 140.1,
+    wickets: 0
+  }
+]
